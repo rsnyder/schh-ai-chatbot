@@ -60,6 +60,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
+        let stream = true;
         document.getElementById('questionForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const question = document.getElementById('question').value;
@@ -70,11 +71,12 @@
             contextDiv.innerHTML = ''; // Clear previous context
             reformulatedDiv.innerHTML = ''; // Clear previous reformulated question
 
-            const url = `/chat_stream/${encodeURIComponent(question)}`;
+            const url = `/chat/${encodeURIComponent(question)}?stream=${stream}`;
 
             const eventSource = new EventSource(url);
 
             eventSource.onmessage = function(event) {
+                console.log(event.data);
                 try {
                     if (event.data.trim()) { // Check if the data is not empty
                         const data = JSON.parse(event.data);

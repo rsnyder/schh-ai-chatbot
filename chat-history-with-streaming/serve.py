@@ -1,18 +1,35 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#### Define options ####
-
-llm_model = 'gpt-4o-mini'
-embeddings_model = 'text-embedding-ada-002'
-
-
 #### Define LLM ####
 
 from langchain_openai import ChatOpenAI
 
-llm = ChatOpenAI(model=llm_model)
+llm = ChatOpenAI(model='gpt-4o-mini')
 
+
+#### Construct retriever and populate vector store ####
+
+'''
+import bs4
+from langchain_chroma import Chroma
+from langchain_community.document_loaders import WebBaseLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+loader = WebBaseLoader(
+  web_paths=('https://lilianweng.github.io/posts/2023-06-23-agent/',),
+  bs_kwargs=dict(
+    parse_only=bs4.SoupStrainer(class_=('post-content', 'post-title', 'post-header'))
+  )
+)
+docs = loader.load()
+
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+splits = text_splitter.split_documents(docs)
+vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
+retriever = vectorstore.as_retriever()
+'''
 
 #### Construct retriever and get vector store ####
 
@@ -21,12 +38,13 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone
 
+model_name = 'text-embedding-ada-002'  
 index_name = 'schh'
 text_field = 'text'
 
 pc = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))
 index = pc.Index(index_name)
-embeddings = OpenAIEmbeddings( model=embeddings_model, openai_api_key=os.getenv('OPENAPI_API_KEY') )
+embeddings = OpenAIEmbeddings( model=model_name, openai_api_key=os.getenv('OPENAPI_API_KEY') )
 vectorstore = PineconeVectorStore( index, embeddings, text_field )  
 retriever = vectorstore.as_retriever()
 
@@ -109,9 +127,6 @@ def print_response(resp):
   }
   print(json.dumps(as_dict, indent=2) + '\n')
 
-def print_session_data(sessionid):
-  print(json.dumps(store[sessionid].model_dump(), indent=2))
-
 
 #### Output streamer ####
 
@@ -162,6 +177,8 @@ async def chat(prompt: str, sessionid: Optional[str] = None, stream: Optional[bo
     return StreamingResponse(generate_chat_events({'input': prompt, 'chat_history': []}, sessionid), media_type='text/event-stream')
   else:
     resp = conversational_rag_chain.invoke({'input': prompt}, config={'configurable': {'session_id': sessionid}}, )
+    # print(json.dumps(store[sessionid].model_dump(), indent=2))
+    # print_response(resp)
     return Response(status_code=200, content=resp['answer'], media_type='text/plain')
 
 if __name__ == '__main__':
