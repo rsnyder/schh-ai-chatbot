@@ -149,17 +149,23 @@ async def generate_chat_events(message, session_id):
 #### FastAPI server ####
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse, Response, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 import secrets
 
 app = FastAPI()
+app.mount('/static', StaticFiles(directory='static'), name='static')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
 
 @app.get('/')
 async def root():
   return FileResponse('index.html')
+
+@app.get('/manifest.json') # For PWA
+async def pwa_manifest():
+  return FileResponse('manifest.json')
 
 @app.get('/chat/{prompt}')
 async def chat(prompt: str, sessionid: Optional[str] = None, stream: Optional[bool] = False):
