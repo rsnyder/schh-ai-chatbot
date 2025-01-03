@@ -19,13 +19,13 @@
     .message { padding: 10px 14px; border-radius: 8px; line-height: 1.5; }
     .user-message { align-self: flex-end; background-color: #ededed; color: #444; }
     .bot-message { align-self: flex-start; background-color: #fff; color: #444;}
-    .input-container { display: flex; align-items: center; padding: 1em 1em .5em 1em; gap: 8px; background: #f1f3f5; border-top: 1px solid #e9ecef; }
+    .input-container { display: flex; align-items: center; padding: 1em 1em .5em 1em; gap: 8px; background: #791917; }
     .chat-textarea { flex: 1; min-height: 40px; max-height: 150px; overflow-y: auto; }
-    .advisory { padding: 0 .5em .5em .5em; background: #f1f3f5; font-size: 0.8em; text-align: center; color: #6c757d; }
-    .input-container svg { width: 32px; height: 32px; opacity: .8; cursor: pointer; }
+    .advisory { padding: 0 .5em .5em .5em; background: #791917; font-size: 0.8em; text-align: center; color: white; padding-bottom: 1em;}
+    .input-container svg { width: 32px; height: 32px; opacity: 1; cursor: pointer; }
     .input-container svg:hover { opacity: 1; }
-    .submit { fill: #007bff; }
-    .drawer-toggle { fill: #444; scale: 80%; }
+    .submit { fill: white; background-color: #791917; border-radius: 50%;}
+    .drawer-toggle { fill: white; scale: 80%; }
     .response { margin-right: auto; position: relative; }
     sl-copy-button { position: absolute; right: -22px; bottom: -4px; margin-left: 0.25rem; padding: 0; background-color: inherit; }
     sl-drawer::part(base) { height: calc(100% - 90px); }
@@ -34,6 +34,7 @@
       .message { max-width: 90%; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; }
       .bot-message { border: 1px solid #e9ecef; } 
     }
+    sl-button::part(base) { background-color: #791917; border-color: #791917; }
   </style>
 </head>
 <body>
