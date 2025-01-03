@@ -60,7 +60,7 @@ from langchain.chains import create_retrieval_chain
 
 system_prompt = '''You are a highly knowledgeable assistant for question-answering tasks. \
 Use the following pieces of retrieved context to answer the question. \
-If the context is insufficient, use your general knowledge. \
+If the context is insufficient, use your general knowledge. Return all text as Markdown source code. \
 
 {context}'''
 

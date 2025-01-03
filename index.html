@@ -8,6 +8,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     @keyframes fadeInOpacity { 0% { opacity: 0; } 100% { opacity: 1; } }
+    /*
     body { margin: 0 auto; padding: 0; font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif; animation: fadeInOpacity ease 1s; max-width: 1000px; }    
     main { display: flex; flex-direction: column; align-items: start; width: 100%; height: 100dvh; visibility: hidden; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; }
     .chat { flex: 1; display: flex; flex-direction: column; align-items: start; width: 100%; height: 100%; overflow-y: auto; padding: 1rem; }
@@ -17,54 +18,71 @@
     .response-wrapper { position: relative; width: 100%; margin-bottom: 1em; justify-self: flex-end; }
     .prompt-wrapper img { max-width: 100px; margin-right: 1em; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px; }
     .prompt, .response { border: 1px solid #ccc; border-radius: 6px; padding: 0.75em; }
-    .response { margin-right: auto; position: relative; }
     .prompt { background-color: #f0f0f0; font-size: 1em; color: #444; }
-    sl-copy-button { position: absolute; right: 0; bottom: 0; z-index: 1000; margin-left: 0.25rem; padding: 0; background-color: white; }
     sl-textarea::part(textarea) { font-size: 1.2em; color: #444;}
+    */
+
+    body { margin: 0; font-family: Arial, sans-serif; background-color: #f8f9fa; height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .chat-container { width: 100%; max-width: 800px; height: 100vh; display: flex; flex-direction: column; background: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; }
+    .chat-area { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .message { padding: 10px 14px; border-radius: 8px; max-width: 80%; line-height: 1.4; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; }
+    .user-message { align-self: flex-end; background-color: #ededed; color: #444; }
+    .bot-message { align-self: flex-start; background-color: #fff; color: #444; border: 1px solid #e9ecef; }
+    .input-container { display: flex; align-items: center; padding: 1em 1em .5em 1em; gap: 8px; background: #f1f3f5; border-top: 1px solid #e9ecef; }
+    .chat-textarea { flex: 1; min-height: 40px; max-height: 150px; overflow-y: auto; }
+    .advisory { padding: 0 .5em .5em .5em; background: #f1f3f5; font-size: 0.8em; text-align: center; color: #6c757d; }
+    .submit { width: 32px; height: 32px; fill: #007bff; opacity: .8; cursor: pointer; }
+    .submit:hover { opacity: 1; }
+    .response { margin-right: auto; position: relative; }
+    sl-copy-button { position: absolute; right: -18px; bottom: -12px; z-index: 1000; margin-left: 0.25rem; padding: 0; background-color: inherit; }
   </style>
 </head>
 <body>
-  
-  <main>
-    <div class="chat">
-      <div id="init-spinner" style="display:flex;align-items: center;gap:0.5em;"><span>Initializing...</span><sl-spinner></sl-spinner></div>
+
+  <div class="chat-container">
+    <div class="chat-area" id="chat-area">
+      <!-- Chat messages will be dynamically added here -->
     </div>
-    <div class="inputWrapper">
-      <sl-textarea class="input" resize="auto" disabled rows="1" placeholder="Enter question"></sl-textarea>
-      <sl-checkbox>Stream</sl-checkbox>
+    <div class="input-container">
+      <sl-textarea
+        class="chat-textarea"
+        placeholder="Type your message..."
+        rows="1"
+        resize="auto">
+      </sl-textarea>
+      <svg class="submit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM385 215c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-71-71L280 392c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-214.1-71 71c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 103c9.4-9.4 24.6-9.4 33.9 0L385 215z"/></svg>
     </div>
-  </main>
+    <div class="advisory">This tool can make mistakes. Check important info.</div>
+  </div>
 
   <script type="module">
 
     import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
     // import any needed Shoelace components (https://shoelace.style/)
-    import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/checkbox/checkbox.js';
     import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/copy-button/copy-button.js';
-    import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/input/input.js';
-    import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/spinner/spinner.js';
     import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/textarea/textarea.js';
 
-    // const apiEndpoint = 'http://localhost:8080' // API endpoint
-    // const apiEndpoint = 'https://openai-jql9.onrender.com'
-    const apiEndpoint = '' // API endpoint
+    // const apiEndpoint = 'https://schh-ai-chatbot.onrender.com'
+    const apiEndpoint = ''
 
-    const main = document.querySelector('main')
-    const chatEl = document.querySelector('.chat')
-    const inputEl = document.querySelector('.input')
+    const chatEl = document.querySelector('.chat-area')
+    const inputEl = document.querySelector('.chat-textarea')
+    const submitButton = document.querySelector('.submit')
+    submitButton.addEventListener('click', (e) => { 
+      let message = inputEl.value.trim()
+      inputEl.value = ''
+      if (message !== '') sendMessage(message)
+    })
     inputEl.addEventListener('keydown', (e) => { 
       if (e.key === 'Enter') {
         e.preventDefault()
         e.stopPropagation()
-        let message = inputEl.value.trim()
-        inputEl.value = ''
-        sendMessage(message)
+        submitButton.dispatchEvent(new CustomEvent('click'))
       }
     })
-    const initSpinner = document.querySelector('#init-spinner')
+
     const inIframe = window.location !== window.parent.location // flag indicating if the page is in an iframe
-    const streamCheckbox = document.querySelector('sl-checkbox')
 
     const md2Html = (md) => marked.parse(md).replace(/^\s*<p>/, '').replace(/<\/p>\s*$/, '') // convert markdown to HTML
     const docReady = (fn) => { if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(fn, 1); else document.addEventListener('DOMContentLoaded', fn) }
@@ -81,8 +99,6 @@
       let msgId = `msg-${++msgCtr}`
 
       const readyForInput = () => {
-        initSpinner.style.display = 'none'
-        inputEl.removeAttribute('disabled')
         setTimeout(() => inputEl.focus(), 100)
         initial = false
       }
@@ -93,32 +109,24 @@
       let copyButton
       if (!initial) {
         let promptWrapperEl = document.createElement('div')
-        promptWrapperEl.setAttribute('class', 'prompt-wrapper')
+        promptWrapperEl.setAttribute('class', 'message user-message')
         let promptEl = document.createElement('div')
         promptEl.id = msgId
-        promptEl.setAttribute('class', 'prompt')
+        // promptEl.setAttribute('class', 'message user-message')
         promptEl.textContent = prompt
         promptWrapperEl.appendChild(promptEl)
         chatEl.appendChild(promptWrapperEl)
         scrollToBottom()
       }
 
-      let url = `${apiEndpoint}/chat/${encodeURIComponent(prompt)}?sessionid=${sessionId}`
-      if (streamCheckbox.checked) url += '&stream=true'
+      let url = `${apiEndpoint}/chat/${encodeURIComponent(prompt)}?sessionid=${sessionId}&stream=true`
       const resp = await fetch(url)
 
       const reader = resp.body.getReader()
       const decoder = new TextDecoder('utf-8')
 
       let responseWrapperEl = document.createElement('div')
-      responseWrapperEl.setAttribute('class', 'response-wrapper')
-
-      if (!initial) {
-        let busyIndicator = document.createElement('div')
-        busyIndicator.className = 'busy'
-        busyIndicator.innerHTML = `Processing...&nbsp&nbsp;<sl-spinner></sl-spinner>`
-        responseWrapperEl.appendChild(busyIndicator)
-      }
+      responseWrapperEl.setAttribute('class', 'message bot-message')
       
       let responseMarkdownEl = document.createElement('div')
       responseMarkdownEl.id = `md-${msgId}`
@@ -132,11 +140,9 @@
       responseWrapperEl.appendChild(responseEl)
       
       copyButton = document.createElement('sl-copy-button')
-      if (!initial) {
-        copyButton.content = prompt
-        copyButton.style.visibility = 'hidden'
-        copyButton.setAttribute('from', `md-${msgId}`)
-      }
+      copyButton.content = prompt
+      copyButton.style.visibility = 'hidden'
+      copyButton.setAttribute('from', `md-${msgId}`)
       
       chatEl.appendChild(responseWrapperEl)
 
@@ -144,10 +150,8 @@
 
       while (true) {
         const { done, value } = await reader.read()
-        chatEl.querySelectorAll('.busy').forEach(el => el.remove())
         if (done) break
-        if (initial) readyForInput()
-        else copyButton.style.visibility = 'visible'
+        if (msgCtr === 1) readyForInput()
 
         response.push(decoder.decode(value))
         responseEl.style.display = 'block'
@@ -155,11 +159,12 @@
         responseEl.appendChild(copyButton)
         scrollToBottom()
       }
+      if (msgCtr > 1) copyButton.style.visibility = 'visible'
       responseMarkdownEl.textContent = response.join('').split('\n').map(line => line.replace(/^#/g, '###')).join('\n')
     }
 
     docReady( async function() { 
-      main.style.visibility = 'visible'
+      // main.style.visibility = 'visible'
       sendMessage('Hello')
     })
 
