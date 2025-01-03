@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SCHH Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>SCHH AI Chatbot</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/themes/light.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -77,6 +77,7 @@
       inputEl.value = ''
       if (message !== '') sendMessage(message)
     })
+    /*
     inputEl.addEventListener('keydown', (e) => { 
       if (e.key === 'Enter') {
         e.preventDefault()
@@ -84,6 +85,7 @@
         submitEl.dispatchEvent(new CustomEvent('click'))
       }
     })
+    */
     drawerEl.querySelector('sl-button').addEventListener('click', () => drawerEl.open = false)
     drawerToggleEl.addEventListener('click', () => drawerEl.open = !drawerEl.open)
 

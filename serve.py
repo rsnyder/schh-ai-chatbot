@@ -69,6 +69,7 @@ Guidelines: \
 or that the context does not provide enough detail. \
 4. All output is returned as Markdown formatted text. \
 5. All references to Sun City refer to Sun City Hilton Head, unless otherwise specified. \
+6. Refer to the context as the "SCHH Knowledge Base" when referenced in responses. \
 
 {context}'''
 
