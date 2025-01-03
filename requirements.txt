@@ -3,4 +3,9 @@ langchain==0.3.13
 langchain-community==0.3.13
 langchain-openai==0.2.14
 langchain-pinecone==0.2.0
+pypdf==5.1.0
 uvicorn==0.34.0
+
+Markdown==3.7
+pypdf==5.1.0
+unstructured==0.16.11
