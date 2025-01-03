@@ -8,33 +8,27 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     @keyframes fadeInOpacity { 0% { opacity: 0; } 100% { opacity: 1; } }
-    /*
-    body { margin: 0 auto; padding: 0; font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif; animation: fadeInOpacity ease 1s; max-width: 1000px; }    
-    main { display: flex; flex-direction: column; align-items: start; width: 100%; height: 100dvh; visibility: hidden; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; }
-    .chat { flex: 1; display: flex; flex-direction: column; align-items: start; width: 100%; height: 100%; overflow-y: auto; padding: 1rem; }
-    .inputWrapper { display: flex; flex-direction: row; align-items: center; width: 100%; padding: 1em; }
-    .input { flex: 1; padding: 1em; }
-    .prompt-wrapper { display: flex; flex-direction: column; align-items: end; width: 100%; margin-bottom: 1em; justify-self: flex-end; }
-    .response-wrapper { position: relative; width: 100%; margin-bottom: 1em; justify-self: flex-end; }
-    .prompt-wrapper img { max-width: 100px; margin-right: 1em; box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px; }
-    .prompt, .response { border: 1px solid #ccc; border-radius: 6px; padding: 0.75em; }
-    .prompt { background-color: #f0f0f0; font-size: 1em; color: #444; }
-    sl-textarea::part(textarea) { font-size: 1.2em; color: #444;}
-    */
-
-    body { margin: 0; font-family: Arial, sans-serif; background-color: #f8f9fa; height: 100dvh; display: flex; justify-content: center; align-items: center; }
+    body { font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol; font-size: 1.1em; margin: 0; background-color: #f8f9fa; height: 100dvh; display: flex; justify-content: center; align-items: center; }
     .chat-container { width: 100%; max-width: 800px; height: 100dvh; display: flex; flex-direction: column; background: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; }
-    .chat-area { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-    .message { padding: 10px 14px; border-radius: 8px; max-width: 80%; line-height: 1.4; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; }
+    .chat-area { padding: .5em; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .message { padding: 10px 14px; border-radius: 8px; line-height: 1.5; }
     .user-message { align-self: flex-end; background-color: #ededed; color: #444; }
-    .bot-message { align-self: flex-start; background-color: #fff; color: #444; border: 1px solid #e9ecef; }
+    .bot-message { align-self: flex-start; background-color: #fff; color: #444;}
     .input-container { display: flex; align-items: center; padding: 1em 1em .5em 1em; gap: 8px; background: #f1f3f5; border-top: 1px solid #e9ecef; }
     .chat-textarea { flex: 1; min-height: 40px; max-height: 150px; overflow-y: auto; }
     .advisory { padding: 0 .5em .5em .5em; background: #f1f3f5; font-size: 0.8em; text-align: center; color: #6c757d; }
-    .submit { width: 32px; height: 32px; fill: #007bff; opacity: .8; cursor: pointer; }
-    .submit:hover { opacity: 1; }
+    .input-container svg { width: 32px; height: 32px; opacity: .8; cursor: pointer; }
+    .input-container svg:hover { opacity: 1; }
+    .submit { fill: #007bff; }
+    .drawer-toggle { fill: #444; scale: 80%; }
     .response { margin-right: auto; position: relative; }
-    sl-copy-button { position: absolute; right: -18px; bottom: -12px; z-index: 1000; margin-left: 0.25rem; padding: 0; background-color: inherit; }
+    sl-copy-button { position: absolute; right: -22px; bottom: -4px; margin-left: 0.25rem; padding: 0; background-color: inherit; }
+    sl-drawer::part(base) { height: calc(100% - 90px); }
+    @media (min-width: 600px) { /* desktop, laptops, wider devices */
+      .chat-area { padding: 1em; } 
+      .message { max-width: 90%; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; }
+      .bot-message { border: 1px solid #e9ecef; } 
+    }
   </style>
 </head>
 <body>
@@ -44,6 +38,7 @@
       <!-- Chat messages will be dynamically added here -->
     </div>
     <div class="input-container">
+      <svg class="drawer-toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/></svg>
       <sl-textarea
         class="chat-textarea"
         placeholder="Type your message..."
@@ -54,22 +49,30 @@
     </div>
     <div class="advisory">This tool can make mistakes. Check important info.</div>
   </div>
+  <sl-drawer label="About" class="drawer">
+    Placeholder for information about the SCHH AI Chatbot...
+    <sl-button slot="footer" variant="primary">Close</sl-button>
+  </sl-drawer>
 
   <script type="module">
 
     import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
     // import any needed Shoelace components (https://shoelace.style/)
+    import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/button/button.js';
     import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/copy-button/copy-button.js';
+    import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/drawer/drawer.js';
     import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/textarea/textarea.js';
 
     // const apiEndpoint = 'https://schh-ai-chatbot.onrender.com'
     const apiEndpoint = ''
 
     const chatEl = document.querySelector('.chat-area')
+    const drawerEl = document.querySelector('.drawer')
     const inputEl = document.querySelector('.chat-textarea')
-    const submitButton = document.querySelector('.submit')
-    submitButton.addEventListener('click', (e) => { 
+    const submitEl = document.querySelector('.submit')
+    const drawerToggleEl = document.querySelector('.drawer-toggle')
+    submitEl.addEventListener('click', (e) => { 
       let message = inputEl.value.trim()
       inputEl.value = ''
       if (message !== '') sendMessage(message)
@@ -78,9 +81,11 @@
       if (e.key === 'Enter') {
         e.preventDefault()
         e.stopPropagation()
-        submitButton.dispatchEvent(new CustomEvent('click'))
+        submitEl.dispatchEvent(new CustomEvent('click'))
       }
     })
+    drawerEl.querySelector('sl-button').addEventListener('click', () => drawerEl.open = false)
+    drawerToggleEl.addEventListener('click', () => drawerEl.open = !drawerEl.open)
 
     const inIframe = window.location !== window.parent.location // flag indicating if the page is in an iframe
 
