@@ -156,11 +156,23 @@ from typing import Optional
 import secrets
 
 app = FastAPI()
+class CacheControlStaticFiles(StaticFiles):
+  def file_response(self, *args, **kwargs) -> Response:
+    response = super().file_response(*args, **kwargs)
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
+
+app.mount("/static", CacheControlStaticFiles(directory="static"), name="static")
 app.mount('/static', StaticFiles(directory='static'), name='static')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
 
 @app.get('/')
 async def root():
+  html = open('index.html', 'r').read()
+
+  html = html.replace('MODEL_NAME', llm_model)
   return FileResponse('index.html')
 
 @app.get('/manifest.json') # For PWA
