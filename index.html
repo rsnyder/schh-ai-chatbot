@@ -14,7 +14,7 @@
     *, *::before, *::after { box-sizing: border-box; }
     @keyframes fadeInOpacity { 0% { opacity: 0; } 100% { opacity: 1; } }
     body { font-family: ui-sans-serif, -apple-system, system-ui, Segoe UI, Helvetica, Apple Color Emoji, Arial, sans-serif, Segoe UI Emoji, Segoe UI Symbol; font-size: 1.1em; margin: 0; background-color: #f8f9fa; height: 100dvh; justify-content: center; align-items: center; }
-    .chat-container { width: 100%; max-width: 800px; height: 100dvh; display: flex; flex-direction: column; background: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; }
+    .chat-container { position: relative; width: 100%; max-width: 800px; height: 100dvh; display: flex; flex-direction: column; background: #fff; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden; margin: 0 auto; }
     .chat-area { padding: .5em; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
     .message { padding: 10px 14px; border-radius: 8px; line-height: 1.5; }
     .user-message { align-self: flex-end; background-color: #ededed; color: #444; }
@@ -28,7 +28,7 @@
     .drawer-toggle { fill: white; scale: 80%; }
     .response { margin-right: auto; position: relative; }
     sl-copy-button { position: absolute; right: -22px; bottom: -4px; margin-left: 0.25rem; padding: 0; background-color: inherit; }
-    sl-drawer::part(base) { height: calc(100% - 90px); }
+    sl-drawer::part(base) { height: calc(100% - 98px); background-color: }
     @media (min-width: 600px) { /* desktop, laptops, wider devices */
       .chat-area { padding: 1em; } 
       .message { max-width: 90%; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; }
@@ -54,11 +54,12 @@
       <svg class="submit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM385 215c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-71-71L280 392c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-214.1-71 71c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9L239 103c9.4-9.4 24.6-9.4 33.9 0L385 215z"/></svg>
     </div>
     <div class="advisory">This tool can make mistakes. Check important info.</div>
+    <sl-drawer contained label="About" class="drawer" style="--size: 100%;">
+      Placeholder for information about the SCHH AI Chatbot...
+      <sl-button slot="footer" variant="primary">Close</sl-button>
+    </sl-drawer>
   </div>
-  <sl-drawer label="About" class="drawer">
-    Placeholder for information about the SCHH AI Chatbot...
-    <sl-button slot="footer" variant="primary">Close</sl-button>
-  </sl-drawer>
+
 
   <script type="module">
 
@@ -82,8 +83,8 @@
       let message = inputEl.value.trim()
       inputEl.value = ''
       if (message !== '') sendMessage(message)
+      inputEl.focus()
     })
-    /*
     inputEl.addEventListener('keydown', (e) => { 
       if (e.key === 'Enter') {
         e.preventDefault()
@@ -91,7 +92,6 @@
         submitEl.dispatchEvent(new CustomEvent('click'))
       }
     })
-    */
     drawerEl.querySelector('sl-button').addEventListener('click', () => drawerEl.open = false)
     drawerToggleEl.addEventListener('click', () => drawerEl.open = !drawerEl.open)
 
@@ -102,7 +102,7 @@
     
     const scrollToBottom = () => chatEl.scrollTop = chatEl.scrollHeight // scroll chat to bottom
     
-    const sessionId = Math.random().toString(36).substring(7)
+    const sessionid = Math.random().toString(36).substring(7)
     let msgCtr = 0
 
     Math.random().toString(36).substring(7) // generate a random session ID
@@ -132,8 +132,11 @@
         scrollToBottom()
       }
 
-      let url = `${apiEndpoint}/chat/${encodeURIComponent(prompt)}?sessionid=${sessionId}&stream=true`
-      const resp = await fetch(url)
+      const resp = await fetch(`${apiEndpoint}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, sessionid, stream: true })
+      })
 
       const reader = resp.body.getReader()
       const decoder = new TextDecoder('utf-8')

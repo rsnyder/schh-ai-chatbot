@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, sys
 import hashlib
 from typing import List
 
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders.pdf import PyPDFDirectoryLoader
-from langchain_community.document_loaders import DirectoryLoader, UnstructuredMarkdownLoader
-from langchain_community.document_loaders import RecursiveUrlLoader
+from langchain_text_splitters import MarkdownHeaderTextSplitter
+from langchain_community.document_loaders import PyPDFLoader
+
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from pinecone import Pinecone
 
@@ -17,12 +19,10 @@ EMBEDDINGS = OpenAIEmbeddings(api_key=os.environ['OPENAI_API_KEY'])
 PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index('schh')
+index = pc.Index('schh-kb')
 
-def read_pdfs(directory: str) -> list[str]:
-  file_loader = PyPDFDirectoryLoader(directory) # Initialize a PyPDFDirectoryLoader object
-  documents = file_loader.load() # Load PDF documents from the directory
-  return  [doc.page_content for doc in documents] # Extract only the page content from each document
+chunk_size = 1000
+chunk_overlap = 200
   
 def chunk_text_for_list(docs: list[str], max_chunk_size: int = 1000) -> list[list[str]]:
   """
@@ -59,8 +59,13 @@ def chunk_text_for_list(docs: list[str], max_chunk_size: int = 1000) -> list[lis
 
 
 def generate_embeddings(documents: list[any]) -> list[list[float]]:
-  """Generate embeddings for a list of documents."""
-  return [EMBEDDINGS.embed_documents(doc) for doc in documents]
+  print (f'generate_embeddings: {len(documents)}')
+  
+  embeddings = []
+  for i, doc in enumerate(documents):
+    if i and i % 20 == 0: print (i)
+    embeddings.append(EMBEDDINGS.embed_documents(doc))
+  return embeddings
 
 def generate_short_id(content: str) -> str:
   """Generate a short ID based on the content using SHA-256 hash."""
@@ -69,7 +74,8 @@ def generate_short_id(content: str) -> str:
   return hash_obj.hexdigest()
 
 def combine_vector_and_text(documents: list[any], doc_embeddings: list[list[float]]) -> list[dict[str, any]]:
-  
+  print (f'combine_vector_and_text: {len(documents)} {len(doc_embeddings)}')
+
   data_with_metadata = []
 
   for doc_text, embedding in zip(documents, doc_embeddings):
@@ -92,52 +98,49 @@ def combine_vector_and_text(documents: list[any], doc_embeddings: list[list[floa
 def upsert_data_to_pinecone(data_with_metadata: list[dict[str, any]]) -> None:
   index.upsert(vectors=data_with_metadata)
 
-def load_pdfs():
-  print ('Loading PDF files')
-  docs = read_pdfs('knowledge-base/pdfs')
-  chunked = chunk_text_for_list(docs=docs)
-  doc_embeddings = generate_embeddings(documents=chunked)
-  data_with_metadata = combine_vector_and_text(documents=chunked, doc_embeddings=doc_embeddings) 
-  upsert_data_to_pinecone(data_with_metadata=data_with_metadata)
+def chunk_markdown(path):
+  print (f'Chunking Markdown file: {path}')
+  markdown_document = open(path).read()
+  headers_to_split_on = [ ('#', 'Header 1'), ('##', 'Header 2') ]
 
-def load_markdown():
-  print ('Loading markdown files')
-  # loader = DirectoryLoader('knowledge-base/markdown', glob='**/*.md', show_progress=True)
-  loader = DirectoryLoader('knowledge-base/markdown', glob='**/*.md', show_progress=True, loader_cls=UnstructuredMarkdownLoader)
-  docs = loader.load()
-  chunked = chunk_text_for_list([doc.page_content for doc in docs])
-  doc_embeddings = generate_embeddings(documents=chunked)
-  data_with_metadata = combine_vector_and_text(documents=chunked, doc_embeddings=doc_embeddings) 
-  upsert_data_to_pinecone(data_with_metadata=data_with_metadata)
+  # MD splits
+  md_header_splits = MarkdownHeaderTextSplitter(
+    headers_to_split_on=headers_to_split_on, 
+    strip_headers=False
+  ).split_text(markdown_document)
 
-def load_website(root_url: str):
-  loader = RecursiveUrlLoader(
-      root_url,
-      max_depth=1,
-      # use_async=False,
-      # extractor=None,
-      # metadata_extractor=None,
-      # exclude_dirs=(),
-      # timeout=10,
-      # check_response_status=True,
-      # continue_on_failure=True,
-      # prevent_outside=True,
-      # base_url=None,
-      # ...
-  )
-  docs = loader.load()
-  for doc in docs:
-    print(doc.page_content)
-    print('\n')
-  '''
-  chunked = chunk_text_for_list([doc.page_content for doc in docs])
-  print(len(chunked))
-  doc_embeddings = generate_embeddings(documents=chunked)
-  data_with_metadata = combine_vector_and_text(documents=chunked, doc_embeddings=doc_embeddings) 
-  upsert_data_to_pinecone(data_with_metadata=data_with_metadata)
-  '''
+  # Char-level splits
+  splits = RecursiveCharacterTextSplitter(
+    chunk_size=chunk_size, 
+    chunk_overlap=chunk_overlap
+  ).split_documents(md_header_splits)
+  
+  return chunk_text_for_list([doc.page_content for doc in splits])
+
+def chunk_pdf(path):
+  print (f'Chunking PDF file: {path}')
+  loader = PyPDFLoader(path)
+  pages = []
+  for page in loader.load():
+    pages.append(page)
+  return chunk_text_for_list([page.page_content for page in pages])
+
+def load(path):
+  chunks = []
+  if path.endswith('.md'):
+    chunks = chunk_markdown(path)
+  elif path.endswith('.pdf'):
+    chunks = chunk_pdf(path)
+  if chunks:
+    doc_embeddings = generate_embeddings(documents=chunks)
+    data_with_metadata = combine_vector_and_text(documents=chunks, doc_embeddings=doc_embeddings)
+    upsert_data_to_pinecone(data_with_metadata=data_with_metadata)
 
 if __name__ == '__main__':
-  # load_website('https://www.suncityhiltonhead.org/')
-  load_pdfs()
-  load_markdown()
+  path = sys.argv[1]
+  if os.path.isdir(path):
+    for root, dirs, files in os.walk(path):
+      for file in files:
+        load(os.path.join(root, file))
+  elif os.path.isfile(path):
+    load(path)

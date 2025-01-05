@@ -21,14 +21,14 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone
 
-index_name = 'schh'
+index_name = 'schh-kb'
 text_field = 'text'
 
 pc = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))
 index = pc.Index(index_name)
 embeddings = OpenAIEmbeddings( model=embeddings_model, openai_api_key=os.getenv('OPENAPI_API_KEY') )
 vectorstore = PineconeVectorStore( index, embeddings, text_field )  
-retriever = vectorstore.as_retriever()
+retriever = vectorstore.as_retriever(search_kwargs={'k': 5})
 
 
 #### Contextualize question ####
@@ -64,9 +64,11 @@ use your general knowledge cautiously. Avoid making up information or guessing. 
 \
 Guidelines: \
 1. Use the context as the primary source for your answers. \
-2. If additional information is needed and not provided in the context, \rely on your general knowledge. \
+2. If additional information is needed and not provided in the context, rely on your general knowledge when you have confidence that it is accurate and relevant. \
 3. All references to Sun City refer to Sun City Hilton Head, unless otherwise specified. \
-4. All output is returned as Markdown formatted text. \
+4. Refer to the context as the "SCHH Knowledge Base" when used in a responses.  Only mention the knowledge base when it does not provide the needed information. \
+5. All output is returned as Markdown formatted text. \
+6. If you cannot answer the question accurately, state that the information is unavailable or that the context does not provide enough detail. \
 
 {context}'''
 
@@ -145,7 +147,7 @@ async def generate_chat_events(message, session_id):
     
 #### FastAPI server ####
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse, Response, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -176,10 +178,15 @@ async def root():
 async def pwa_manifest():
   return FileResponse('manifest.json')
 
-@app.get('/chat/{prompt}')
-async def chat(prompt: str, sessionid: Optional[str] = None, stream: Optional[bool] = False):
+@app.post('/chat')
+async def chat(request: Request):
   
-  sessionid = sessionid or secrets.token_hex(4) # Generates 4 bytes, resulting in an 8-character hex string
+  payload = await request.body()
+  message = json.loads(payload)
+
+  sessionid = message.get('sessionid', secrets.token_hex(4))
+  prompt = message.get('prompt', '')
+  stream = message.get('stream', False)
 
   if stream:
     return StreamingResponse(generate_chat_events({'input': prompt, 'chat_history': []}, sessionid), media_type='text/event-stream')
