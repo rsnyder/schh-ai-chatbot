@@ -8,7 +8,7 @@ It’s important for the players AND the Group Leaders to understand these rules
 
 ---
 
-## PLAYER INFORMATION
+### PLAYER INFORMATION
 
 1. **Players may participate in two groups**:
    - If you choose to play in only one group, that group will be entered into **Lottery Draw A**.
@@ -25,7 +25,7 @@ It’s important for the players AND the Group Leaders to understand these rules
 
 ---
 
-## SPECIAL INSTRUCTIONS FOR GROUP LEADERS
+### SPECIAL INSTRUCTIONS FOR GROUP LEADERS
 
 1. The **Group Leader (GL)** must verify all members of their group are:
    - SCHH Pickleball Club members.
@@ -47,7 +47,7 @@ It’s important for the players AND the Group Leaders to understand these rules
 
 ---
 
-## REGISTRATION PROCESS
+### REGISTRATION PROCESS
 
 - The electronic registration link will be emailed to **all current PB Club members**.  
 - Only **Group Leaders (GL)** are required to submit the registration.
@@ -58,7 +58,7 @@ It’s important for the players AND the Group Leaders to understand these rules
 
 ---
 
-## LOTTERY DRAW PROCEDURE
+### LOTTERY DRAW PROCEDURE
 
 1. **Randomization**:
    - Groups are randomized, and numbers are assigned to each group for each day of play.
@@ -78,7 +78,7 @@ It’s important for the players AND the Group Leaders to understand these rules
 
 ---
 
-## MISCELLANEOUS NOTES
+### MISCELLANEOUS NOTES
 
 1. **PickleTennis** permanent court reservations will occur in **Draw C**.
 

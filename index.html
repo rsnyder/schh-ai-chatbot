@@ -71,6 +71,9 @@
     import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/drawer/drawer.js';
     import 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.18.0/cdn/components/textarea/textarea.js';
 
+    const inIframe = window.location !== window.parent.location // flag indicating if the page is in an iframe
+    const isMobile = ('ontouchstart' in document.documentElement && /mobi/i.test(navigator.userAgent) )
+
     // const apiEndpoint = 'https://schh-ai-chatbot.onrender.com'
     const apiEndpoint = ''
 
@@ -83,7 +86,7 @@
       let message = inputEl.value.trim()
       inputEl.value = ''
       if (message !== '') sendMessage(message)
-      inputEl.focus()
+      if (!isMobile) inputEl.focus()
     })
     inputEl.addEventListener('keydown', (e) => { 
       if (e.key === 'Enter') {
@@ -94,8 +97,6 @@
     })
     drawerEl.querySelector('sl-button').addEventListener('click', () => drawerEl.open = false)
     drawerToggleEl.addEventListener('click', () => drawerEl.open = !drawerEl.open)
-
-    const inIframe = window.location !== window.parent.location // flag indicating if the page is in an iframe
 
     const md2Html = (md) => marked.parse(md).replace(/^\s*<p>/, '').replace(/<\/p>\s*$/, '') // convert markdown to HTML
     const docReady = (fn) => { if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(fn, 1); else document.addEventListener('DOMContentLoaded', fn) }
@@ -112,7 +113,7 @@
       let msgId = `msg-${++msgCtr}`
 
       const readyForInput = () => {
-        setTimeout(() => inputEl.focus(), 100)
+        if (!isMobile) setTimeout(() => inputEl.focus(), 100)
         initial = false
       }
 

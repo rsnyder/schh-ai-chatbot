@@ -15,6 +15,8 @@ The Argent Lakes course features 18 uniquely designed holes for players with bus
 Yards: 3,851
 Par: 61
 
+### Rating and Slope
+
 - **Men's Tees**
   - Championship
     - Rating: 61.1
@@ -44,12 +46,8 @@ Par: 61
 
 ### Contact
 
-Address:  
-1291 Sgt. William Jasper Blvd. N  
-Hardeeville, SC 29927
-
-Phone: (843) 645-0507
-
+Address: 1291 Sgt. William Jasper Blvd. N Hardeeville, SC 29927  
+Phone: (843) 645-0507  
 Hours: 7 a.m. – 6 p.m.
 
 ### Scorecard
@@ -84,29 +82,42 @@ Described as classic and traditional by its designer, PGA Tour professional Mark
 Yards: 6,407
 Par: 72
 
-| Men's | Rating | Slope |
-| ----- | -----: | ----: |
-| Red   |   72.3 |   128 |
-| Gold  |   70.8 |   124 |
-| Blue  |   68.5 |   115 |
-| White |   65.5 |   108 |
-| Black |   62.6 |   101 |
+### Rating and Slope
 
-| Women's | Rating | Slope |
-| ------- | -----: | ----: |
-| Blue    |   72.3 |   118 |
-| White   |   70.2 |   118 |
-| Black   |   66.9 |   111 |
-| Orange  |   63.0 |   104 |
+- **Men's Tees**
+  - Red
+    - Rating: 72.3
+    - Slope: 128
+  - Gold
+    - Rating: 70.8
+    - Slope: 124
+  - Blue
+    - Rating: 68.5
+    - Slope: 115
+  - White
+    - Rating: 65.5
+    - Slope: 108
+  - Black
+    - Rating: 62.6
+    - Slope: 101
+- **Women's Tees**
+  - Blue
+    - Rating: 72.3
+    - Slope: 118
+  - White
+    - Rating: 70.2
+    - Slope: 118
+  - Black
+    - Rating: 66.9
+    - Slope: 111
+  - Orange
+    - Rating: 63.0
+    - Slope: 104
 
 ### Contact
 
-Address:  
-60 Sun City Club Lane  
-Bluffton, SC 29909
-
-Phone: (843) 705-4653
-
+Address: 60 Sun City Club Lane Bluffton, SC 29909  
+Phone: (843) 705-4653  
 Hours: 7 a.m. – 6 p.m.
 
 ### Scorecard
@@ -145,28 +156,39 @@ Mark McCumber, a ten-time PGA Tour winner has designed this magnificent addition
 Yards: 6,549
 Par: 72
 
-| Men's | Rating | Slope |
-| ----- | -----: | ----: |
-| Red   |   74.0 |   136 |
-| Gold  |   72.1 |   131 |
-| Blue  |   69.8 |   127 |
-| White |   67.7 |   230 |
-| Black |   65.1 |   114 |
+### Rating and Slope
 
-| Women's | Rating | Slope |
-| ------- | -----: | ----: |
-| White   |   72.6 |   131 |
-| Black   |   69.5 |   123 |
-| Orange  |   65.4 |   114 |
-
+- **Men's Tees**
+  - Red
+    - Rating: 74.0
+    - Slope: 136
+  - Gold
+    - Rating: 72.1
+    - Slope: 131
+  - Blue
+    - Rating: 69.8
+    - Slope: 127
+  - White
+    - Rating: 67.7
+    - Slope: 120
+  - Black
+    - Rating: 65.1
+    - Slope: 114
+- **Women's Tees**
+  - White
+    - Rating: 72.6
+    - Slope: 131
+  - Black
+    - Rating: 69.5
+    - Slope: 123
+  - Orange
+    - Rating: 65.4
+    - Slope: 114
+  
 ### Contact
 
-Address:  
-671 Cypress Hills Drive  
-Bluffton, South Carolina 29909
-
-Phone: (843) 705-4999
-
+Address: 671 Cypress Hills Drive Bluffton, South Carolina 29909  
+Phone: (843) 705-4999  
 Hours: 7 a.m. – 6 p.m.
 
 ### Scorecard

@@ -9,40 +9,28 @@ The Sun City Bocce Club has 50 leagues and at $4 per calendar year, it is one of
 =============
 
 Roy Powers
-
 843-707-9186
-
 roypowers42@gmail.com
-
   
-
 **Vice President**
 
 Linda White
-
 843-707-7407
-
-[boccevp01@gmail.com](mailto:boccevp@gmail.com)
+boccevp01@gmail.com
 
 **Treasurer**
 
 Susan Zimmerman
-
 910-274-1736
-
-**snz15@juno.com**
+snz15@juno.com
 
 S**ecretary**
 
 Carma Hart
-
 719-238-1023
-
 twooldharts@hotmail.com
 
 Our Winter membership meeting will be Monday January 6th at 1:30 pm in the Hidden Cypress Ballroom.  The Winter season will begin Sunday January 12 and run through Saturday, March 8th.. 
-
-  
 
 **Residents may reserve court time through the Chelsea system. To register please call the Logo Building at  843-705-4034.**
 
