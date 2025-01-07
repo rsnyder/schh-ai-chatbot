@@ -16,7 +16,7 @@ EMBEDDINGS = OpenAIEmbeddings(api_key=os.environ['OPENAI_API_KEY'])
 PINECONE_API_KEY = os.getenv('PINECONE_API_KEY')
 
 pc = Pinecone(api_key=PINECONE_API_KEY)
-index = pc.Index('schh-kb')
+index = pc.Index('schh')
 
 chunk_size = 1000
 chunk_overlap = 200

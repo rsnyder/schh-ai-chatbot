@@ -756,7 +756,7 @@ The arts and crafts rooms are multi-purpose rooms that provide space for a varie
 - Photography 
 - Sewing
 
-### 5.7.	 Dog Parks 
+### 5.7. Dog Parks 
 
 The Association has fenced-in dog parks reserved for Residents and their pets, to include Red Dam Dog Park, Argent Lakes Dog Park and Sun City West Dog Park. Please see the Community Map available on the community website at www.SunCityHiltonHead.org to see the location of the dog parks. Guests are welcome to bring their dogs to the dog parks accompanied by their resident host. Dog owners shall obey the rules of the dog parks.
 

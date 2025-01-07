@@ -21,7 +21,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from pinecone import Pinecone
 
-index_name = 'schh-kb'
+index_name = 'schh'
 text_field = 'text'
 
 pc = Pinecone(api_key=os.getenv('PINECONE_API_KEY'))

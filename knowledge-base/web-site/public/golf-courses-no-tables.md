@@ -6,7 +6,7 @@ Located inside Sun City Hilton Head, the Sun City Golf experience is a short 20 
 
 The three Sun City Hilton Head courses are as diverse as South Carolina itself, each woven into the Lowcountry terrain with a unique vision and infused with the impeccable quality that is Troon Golf hallmark.
 
-# Argent Lakes Golf Course
+## Argent Lakes
 
 Sun City Hilton Head is home to the only premier executive course in the Lowcountry. Built for your pleasure, Argent Lakes Golf Course features the fun and length of an executive course maintained in the style of a championship course.
 
@@ -15,23 +15,34 @@ The Argent Lakes course features 18 uniquely designed holes for players with bus
 Yards: 3,851
 Par: 61
 
-## Argent Lakes Creek Rating and Slope
+- **Men's Tees**
+  - Championship
+    - Rating: 61.1
+    - Slope: 104
+  - Tournament
+    - Rating: 59.7
+    - Slope: 101
+  - Member
+    - Rating: 58.8
+    - Slope: 98
+  - Club
+    - Rating: 58.2
+    - Slope: 96
+  - Forward
+    - Rating: 57.0
+    - Slope: 93
+- **Women's Tees**
+  - Member
+    - Rating: 59.7
+    - Slope: 100
+  - Club
+    - Rating: 59.0
+    - Slope: 99
+  - Forward
+    - Rating: 57.4
+    - Slope: 92
 
-|    Men's     | Rating | Slope |
-| ------------ | -----: | ----: |
-| Championship |   61.1 |   104 |
-| Tournament   |   59.7 |   101 |
-| Member       |   58.8 |    98 |
-| Club         |   58.2 |    96 |
-| Forward      |   57.0 |    93 |
-
-|   Women's    | Rating | Slope |
-| ------------ | -----: | ----: |
-| Member       |   59.7 |   100 |
-| Club         |   59.0 |    99 |
-| Forward      |   57.4 |    92 |
-
-## Argent Lakes Contact
+### Contact
 
 Address:  
 1291 Sgt. William Jasper Blvd. N  
@@ -41,7 +52,7 @@ Phone: (843) 645-0507
 
 Hours: 7 a.m. – 6 p.m.
 
-## Argent Lakes Scorecard - Front 9
+### Scorecard
 
 | Hole         |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  | Out  |
 | ------------ | --: | --: | --: | --: | --: | --: | --: | --: | --: | ---: |
@@ -53,8 +64,6 @@ Hours: 7 a.m. – 6 p.m.
 | Men's Hdcp.  |   7 |   5 |  11 |   9 |  13 |  15 |   3 |  17 |   1 |      |
 | Ladies Hdcp. |   7 |   3 |   9 |  13 |  11 |  15 |   5 |  17 |   1 |      |
 | Par          |   4 |   3 |   3 |   3 |   3 |   3 |   4 |   3 |   4 |   30 |
-
-## Argent Lakes Scorecard - Back 9
 
 | Hole         |  10 |  11 |  12 |  13 |  14 |  15 |  16 |  17 |  18 |  In  | Total |
 | ------------ | --: | --: | --: | --: | --: | --: | --: | --: | --: | ---: | ----: |
@@ -68,14 +77,12 @@ Hours: 7 a.m. – 6 p.m.
 | Par          |   4 |   3 |   3 |   5 |   3 |   3 |   3 |   3 |   4 |   31 |    61 |
 
 
-# Okatie Creek Golf Course
+## Okatie Creek
 
 Described as classic and traditional by its designer, PGA Tour professional Mark McCumber, the Okatie Creek Golf Club uses of the natural contours of the land as it winds through abundant Southern pines and marshes. Five sets of tees along with some of the best greens in the Lowcountry allow players of all abilities to enjoy their round, and the choice of “attack or relax” for their style of play.
 
 Yards: 6,407
 Par: 72
-
-## Okatie Creek Rating and Slope
 
 | Men's | Rating | Slope |
 | ----- | -----: | ----: |
@@ -92,7 +99,7 @@ Par: 72
 | Black   |   66.9 |   111 |
 | Orange  |   63.0 |   104 |
 
-# Okatie Creek Contact
+### Contact
 
 Address:  
 60 Sun City Club Lane  
@@ -102,7 +109,7 @@ Phone: (843) 705-4653
 
 Hours: 7 a.m. – 6 p.m.
 
-## Okatie Creek Scorecard
+### Scorecard
 
 | Hole         |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  | Out  |
 | ------------ | --: | --: | --: | --: | --: | --: | --: | --: | --: | ---: |
@@ -129,7 +136,7 @@ Hours: 7 a.m. – 6 p.m.
 | Par          |  |  |  |  |  |  |  |  |  |  |  |
 
 
-# Hidden Cyprus Golf Course
+## Hidden Cyprus
 
 The Hidden Cypress course at the Sun City features 6,946 yards of a unique golf challenge. Golfers love the beauty of the course, but also face a unique challenge of menacing greens and undulating greens.
 
@@ -137,8 +144,6 @@ Mark McCumber, a ten-time PGA Tour winner has designed this magnificent addition
 
 Yards: 6,549
 Par: 72
-
-## Hidden Cyprus Rating and Slope
 
 | Men's | Rating | Slope |
 | ----- | -----: | ----: |
@@ -154,7 +159,7 @@ Par: 72
 | Black   |   69.5 |   123 |
 | Orange  |   65.4 |   114 |
 
-## Hidden Cyprus Contact
+### Contact
 
 Address:  
 671 Cypress Hills Drive  
@@ -164,7 +169,7 @@ Phone: (843) 705-4999
 
 Hours: 7 a.m. – 6 p.m.
 
-## Hidden Cyprus Scorecard
+### Scorecard
 
 | Hole         |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  | Out  |
 | ------------ | --: | --: | --: | --: | --: | --: | --: | --: | --: | ---: |
