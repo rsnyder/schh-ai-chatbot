@@ -61,11 +61,14 @@ def chunk_pdf(path):
 
 def load(path, dryrun=False, verbose=False, **kwargs):
   logger.info(f'Loading {path} into Pinecone, dryrun={dryrun}')
+  file_type = path.split('.')[-1]
   docs = []
-  if path.endswith('.md'):
+  
+  if 'md' == file_type:
     docs = chunk_markdown(path)
-  elif path.endswith('.pdf'):
+  elif 'pdf' == file_type:
     docs = chunk_pdf(path)
+
   if docs:
     if verbose:
       print(f'\nDocs: {len(docs)}' + '\n\n---\n')
@@ -76,16 +79,19 @@ def load(path, dryrun=False, verbose=False, **kwargs):
     
     print('Generating embeddings')
     doc_embeddings = EMBEDDINGS.embed_documents([doc.page_content for doc in docs])
+    
     data_with_metadata = []
-
     for doc, embedding in zip(docs, doc_embeddings):
-        # Create a data item dictionary
-        data_item = {
-            'id': generate_short_id(doc.page_content),
-            'values': embedding,
-            'metadata': doc.metadata | {'text': doc.page_content},  # add text as metadata
-        }
-        data_with_metadata.append(data_item)  # Append the data item to the list
+      if file_type == 'md':
+        id = ': '.join([doc.metadata[key] for key in sorted(doc.metadata)]).replace(' ', '_')
+      elif file_type == 'pdf':
+        id = generate_short_id(doc.page_content)
+      data_item = {
+          'id': id,
+          'values': embedding,
+          'metadata': doc.metadata | {'text': doc.page_content},  # add text as metadata
+      }
+      data_with_metadata.append(data_item)  # Append the data item to the list
     
     if not dryrun:
       upsert_data_to_pinecone(data_with_metadata=data_with_metadata, **kwargs)
@@ -101,12 +107,15 @@ if __name__ == '__main__':
   parser.add_argument('path', help='Path to a file or directory to load')
 
   args = vars(parser.parse_args())
-  print(json.dumps(args, indent=2))
+  print(json.dumps(args))
   
   path = sys.argv[1]
   if os.path.isdir(args['path']):
     for root, dirs, files in os.walk(args['path']):
       for file in files:
+        name, extension = os.path.splitext(file)
+        if (extension == '.pdf' and f'{name}.md' in files):
+          continue # Skip PDF files that have corresponding markdown files
         args['path'] = os.path.join(root, file)
         load(**args)
   elif os.path.isfile(args['path']):
